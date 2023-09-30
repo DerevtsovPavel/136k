@@ -4,6 +4,7 @@
 #include <time.h>
 #include <fstream>
 #include <string>
+#include <stdexcept>
 #pragma once
 
 using namespace std;
@@ -12,10 +13,9 @@ using namespace std;
 ///Заполнение массива а размером n случ числами от min до max
 void random_array(float* a, unsigned n,float min,float max)
 {	
-	if (a == nullptr) throw 1;
-	// throw invalid_argument("");
+	if (a == nullptr) throw invalid_argument("Zero array");
 	
-	else if (n==0) {throw 2;}
+	else if (n==0) throw out_of_range("Size of array==0");
 	else
 	{
 		for (unsigned i=0; i<n; i++)
@@ -27,9 +27,9 @@ void random_array(float* a, unsigned n,float min,float max)
 ///вывод массива а размером n на экран по е элементов в строке
 void print_array(const float* a, unsigned n, unsigned e)
 {	
-	if (a == nullptr) throw 1;
+	if (a == nullptr) throw invalid_argument("Zero array");
 	
-	 else if (n==0) {throw 2;}
+	 else if (n==0) throw out_of_range("Size of array==0");
 	else
 	{
 		unsigned k=0;
@@ -51,8 +51,8 @@ void print_array(const float* a, unsigned n, unsigned e)
 float sum_ar(float* a, unsigned n)
 {	
 	float s=0;
-	if (a == nullptr) throw 1; 
-	else if (n==0) {throw 2;}
+	if (a == nullptr) throw invalid_argument("Zero array"); 
+	else if (n==0) throw out_of_range("Size of array==0");
 	else 
 	{
 		
@@ -66,10 +66,10 @@ float sum_ar(float* a, unsigned n)
 ///запись размера и массива в файл name. Сначала пишем размер-n, затем массив а в столбик
 void array_infile(float* a, unsigned n,std::string& name)
 {	
-	if (a == nullptr) throw 1;
+	if (a == nullptr) throw invalid_argument("Zero array");
 	 
-	 else if (n==0) {throw 2;}
-	else if (name.length()==0) {throw 3;}
+	 else if (n==0) throw out_of_range("Size of array==0");
+	else if (name.length()==0) throw length_error("No file name");
 
 	else
 	{
@@ -90,7 +90,7 @@ void array_infile(float* a, unsigned n,std::string& name)
 
 			f.close();
 		}
-		else{throw 4;}//если файл не открылся
+		else throw runtime_error("File not open"); //если файл не открылся
 	}
 	 	
 }
@@ -101,14 +101,14 @@ void array_infile(float* a, unsigned n,std::string& name)
 float* array_outfile( unsigned& n,std::string& name)
 {
 	float* a=nullptr;
-	if (name.length()==0){throw 3;}
+	if (name.length()==0) throw runtime_error("File not open");
 	else
 	{
 		ifstream f(name);
 		if (f.is_open())
 		{
 			f >> n;
-			if (n==0){throw 2;}
+			if (n==0)throw out_of_range("Size of array==0");
 			a = new float[n]{0};
 
 			for (unsigned i = 0; i < n; i++)
@@ -118,7 +118,7 @@ float* array_outfile( unsigned& n,std::string& name)
 
 			f.close();
 		}
-		else{throw 4;}
+		else throw runtime_error("File not open");
 	}
 
 	return a;
@@ -128,10 +128,10 @@ float* array_outfile( unsigned& n,std::string& name)
 ///запись массива a и размера n в бинарный файл с именем name
 void array_inbinary(float* a, unsigned n,std::string& name)
 {	
-	if (a == nullptr) throw 1;
+	if (a == nullptr) throw invalid_argument("Zero array");
 	
-	else if (n==0) {throw 2;}
-	else if (name.length()==0) {throw 3;}
+	else if (n==0) throw out_of_range("Size of array==0");
+	else if (name.length()==0) throw length_error("No file name");
 	else
 	{
 		ofstream f(name,ios::binary);
@@ -149,7 +149,7 @@ void array_inbinary(float* a, unsigned n,std::string& name)
 
 			f.close();
 		}
-		else{throw 4;}
+		else throw runtime_error("File not open");
 }	}
 	
 
@@ -157,7 +157,7 @@ void array_inbinary(float* a, unsigned n,std::string& name)
 float* array_outbinary(unsigned& n,std::string& name)
 {	
 	float* a=nullptr;//создаём ук на а
-	if (name.length()==0){throw 3;}
+	if (name.length()==0) throw length_error("No file name");
 	else
 	{
 		ifstream f(name,ios::binary);
@@ -165,7 +165,7 @@ float* array_outbinary(unsigned& n,std::string& name)
 		{
 			f.read((char*)&n,sizeof(n));
 
-			if (n==0) {throw 2;}
+			if (n==0) throw out_of_range("Size of array==0");
 
 			a = new float[n]{0};//создаём массив а из n эл и заполняем нулями
 
@@ -177,7 +177,7 @@ float* array_outbinary(unsigned& n,std::string& name)
 			f.close();
 
 		}
-		else{throw 4;}
+		else throw runtime_error("File not open");
 	}
 	return a;
 }

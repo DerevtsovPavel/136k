@@ -7,6 +7,7 @@
 #include <iomanip>//для setprecision
 #include "array.h"
 #include <string>
+#include <stdexcept>
 
 #define NDEBUG;//отключаем assert
 using namespace std;
@@ -31,73 +32,75 @@ int main()
 	const float MAX=10.9;
 
 	srand(time(0));
-	try 
-	{
-		cout<<"Input size of array: ";
-		cin>>n;
-		if (n==0) throw 2;
-		cout<<"\n";
-
-		float* ar=new float [n]{0};
-
-		///для тестов
-		float*b=nullptr;
-		string s2;
-	
-	
-	
-		random_array(ar,n,MIN,MAX);
-
-		cout<<fixed<<setprecision(1);//вывод с одним знаком после запятой
-
-		cout<<"Input number of elements in string:";
-		unsigned e=0;
-		cin>>e;
-		cout<<"\n";
-
-		cout<<"Array:"<<endl;
-		print_array(ar,n,e);
-
-		cout<<fixed<<setprecision(2);
-		cout<<"Answer: "<<sum_ar(ar,n)<<endl;
-
-		
-		string s;
-
-		cout<<"Text file name: ";
-		cin>>s;//спрашиваем имя файла
-
-		array_infile(ar,n,s);
-		delete[] ar;
-		n=0;
-
-		ar=array_outfile(n,s);
-
-		cout<<fixed<<setprecision(1);
-		cout<<"Array:"<<endl;
-		print_array(ar,n,e);
-
-		cout << "Binary file name: ";
-		cin >> s;//спрашиваем имя файла
-		array_inbinary(ar,n,s);
-
-		delete[] ar;
-		n=0;
-
-		ar=array_outbinary(n,s);
-		cout<<"Array:"<<endl;
-		print_array(ar,n,e);
+	cout<<"Input size of array: ";
+	cin>>n;
+	if (n==0)
+	{	cout<<"Zero size"<<endl;
+		return -1;
 	}
 
-	catch (int error)
+	else
 	{
-		switch (error)
+		cout<<"\n";
+
+		try 
 		{
-			case 1: cout<<"Zero array"<<endl; break;
-			case 2: cout<<"Size of array == 0"<<endl; break;
-			case 3: cout<<"No file name"<<endl; break;
-			case 4: cout<<"File not open"<<endl; break;
+			
+
+			float* ar=new float [n]{0};
+
+			///для тестов
+			float*b=nullptr;
+			string s2;
+		
+		
+		
+			random_array(ar,n,MIN,MAX);
+
+			cout<<fixed<<setprecision(1);//вывод с одним знаком после запятой
+
+			cout<<"Input number of elements in string:";
+			unsigned e=0;
+			cin>>e;
+			cout<<"\n";
+
+			cout<<"Array:"<<endl;
+			print_array(ar,n,e);
+
+			cout<<fixed<<setprecision(2);
+			cout<<"Answer: "<<sum_ar(ar,n)<<endl;
+
+			
+			string s;
+
+			cout<<"Text file name: ";
+			cin>>s;//спрашиваем имя файла
+
+			array_infile(ar,n,s);
+			delete[] ar;
+			n=0;
+
+			ar=array_outfile(n,s);
+
+			cout<<fixed<<setprecision(1);
+			cout<<"Array:"<<endl;
+			print_array(ar,n,e);
+
+			cout << "Binary file name: ";
+			cin >> s;//спрашиваем имя файла
+			array_inbinary(ar,n,s);
+
+			delete[] ar;
+			n=0;
+
+			ar=array_outbinary(n,s);
+			cout<<"Array:"<<endl;
+			print_array(ar,n,e);
+		}
+
+		catch (const exception &error)
+		{
+			 cout<<error.what()<<endl;
 		}
 	}
-
 }
